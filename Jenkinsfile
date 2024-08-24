@@ -9,7 +9,7 @@ pipeline {
         IMAGE_FRAPPE = "${IMAGE_NAME}:${RELEASE_VERSION}"
         IMAGE_BENCH = "${IMAGE_NAME}-bench:${RELEASE_VERSION}"
         PLATFORM = 'linux/amd64,linux/arm64'
-        DOCKERFILE_FRAPPE = './images/custom/Containerfile'
+        DOCKERFILE_FRAPPE = './images/production/Containerfile'
         DOCKERFILE_BENCH = './images/bench/Dockerfile'
         DOCKER_BUILD = "docker buildx build --platform $PLATFORM"
         DOCKER_CACHE_FROM = '--cache-from type=local,src=/tmp/.buildx-cache'
