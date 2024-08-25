@@ -230,7 +230,7 @@ persistence:
     enabled: true
     # existingClaim: ""
     size: 8Gi
-    # storageClass: "nfs"
+    storageClass: "longhorn"
   logs:
     # Container based log search and analytics stack recommended
     enabled: false
@@ -242,20 +242,21 @@ persistence:
 ingress:
   # ingressName: ""
   # className: ""
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: finkash
+    acme.cert-manager.io/http01-edit-in-place: "true"
   hosts:
-  - host: erp.cluster.local
+  - host: skm.finkash.co.za
     paths:
     - path: /
       pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: auth-server-tls
-  #    hosts:
-  #      - auth-server.local
+  tls:
+   - secretName: skm-server-tls
+     hosts:
+       - skm.finkash.co.za
 
 jobs:
   volumePermissions:
@@ -281,8 +282,8 @@ jobs:
   createSite:
     enabled: false
     forceCreate: false
-    siteName: "erp.cluster.local"
-    adminPassword: "changeit"
+    siteName: "skm.finkash.co.za"
+    adminPassword: "6lB9fwr8jPlqgLHk"
     installApps:
     - "erpnext"
     dbType: "mariadb"
@@ -295,7 +296,7 @@ jobs:
   dropSite:
     enabled: false
     forced: false
-    siteName: "erp.cluster.local"
+    siteName: "skm.finkash.co.za"
     backoffLimit: 0
     resources: {}
     nodeSelector: {}
@@ -304,7 +305,7 @@ jobs:
 
   backup:
     enabled: false
-    siteName: "erp.cluster.local"
+    siteName: "skm.finkash.co.za"
     withFiles: true
     backoffLimit: 0
     resources: {}
@@ -314,7 +315,7 @@ jobs:
 
   migrate:
     enabled: false
-    siteName: "erp.cluster.local"
+    siteName: "skm.finkash.co.za"
     skipFailing: false
     backoffLimit: 0
     resources: {}
@@ -386,10 +387,10 @@ mariadb:
   # https://github.com/bitnami/charts/tree/master/bitnami/mariadb
   enabled: true
   auth:
-    rootPassword: "changeit"
+    rootPassword: "kIIq!MF$I9&rDtQ3"
     username: "erpnext"
-    password: "changeit"
-    replicationPassword: "changeit"
+    password: "f$kKu0NNkHVPd7G#"
+    replicationPassword: "2XxRdyFhVPAK*^ke"
   primary:
     service:
       ports:
