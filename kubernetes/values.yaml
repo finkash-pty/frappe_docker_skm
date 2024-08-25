@@ -3,10 +3,10 @@
 # Declare variables to be passed into your templates.
 
 # Configure external database host
-# dbHost: ""
-# dbPort: 3306
-# dbRootUser: ""
-# dbRootPassword: ""
+dbHost: "srv-db-1.finkash.co.za"
+dbPort: 3366
+dbRootUser: "root"
+dbRootPassword: "PudxrWP2Y6TTmX5A"
 # dbRds: false
 
 image:
@@ -20,8 +20,8 @@ nginx:
     enabled: false
     minReplicas: 1
     maxReplicas: 3
-    targetCPU: 75
-    targetMemory: 75
+    targetCPU: 1000
+    targetMemory: 2048
   # config: |
   #   # custom conf /etc/nginx/conf.d/default.conf
   environment:
