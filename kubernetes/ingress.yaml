@@ -3,11 +3,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: erpnext
+  name: 	frappe-bench-erpnext
   labels:
     helm.sh/chart: erpnext-7.0.107
-    app.kubernetes.io/name: erpnext
-    app.kubernetes.io/instance: erpnext
+    app.kubernetes.io/name: 	frappe-bench-erpnext
+    app.kubernetes.io/instance: 	frappe-bench-erpnext
     app.kubernetes.io/version: "v15.33.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -28,6 +28,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: erpnext
+                name: frappe-bench-erpnext
                 port:
                   number: 8080

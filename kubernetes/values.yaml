@@ -1,3 +1,4 @@
+beta.kubernetes.io/arch : amd64
 # Default values for erpnext.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
@@ -10,8 +11,8 @@ dbRootPassword: "PudxrWP2Y6TTmX5A"
 # dbRds: false
 
 image:
-  repository: frappe/erpnext
-  tag: v15.33.5
+  repository: ghcr.io/finkash-pty/frappe/erpnext
+  tag: v15
   pullPolicy: IfNotPresent
 
 nginx:
@@ -43,7 +44,8 @@ nginx:
     type: ClusterIP
     port: 8080
   resources: {}
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   tolerations: []
   affinity: {}
   envVars: []
@@ -73,7 +75,8 @@ worker:
       type: ClusterIP
       port: 8000
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     args: []
@@ -90,7 +93,8 @@ worker:
       targetCPU: 75
       targetMemory: 75
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     livenessProbe:
@@ -112,7 +116,8 @@ worker:
       targetCPU: 75
       targetMemory: 75
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     livenessProbe:
@@ -134,7 +139,8 @@ worker:
       targetCPU: 75
       targetMemory: 75
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     livenessProbe:
@@ -150,7 +156,8 @@ worker:
   scheduler:
     replicaCount: 1
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     livenessProbe:
@@ -215,7 +222,8 @@ socketio:
     initialDelaySeconds: 5
     periodSeconds: 10
   resources: {}
-  nodeSelector: {}
+  nodeSelector:
+    kubernetes.io/arch: amd64
   tolerations: []
   affinity: {}
   service:
@@ -263,16 +271,18 @@ jobs:
     enabled: false
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
 
   configure:
     enabled: true
-    fixVolume: true
+    fixVolume: false
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
     envVars: []
@@ -286,30 +296,34 @@ jobs:
     adminPassword: "6lB9fwr8jPlqgLHk"
     installApps:
     - "erpnext"
+    - "hrms"
     dbType: "mariadb"
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
 
   dropSite:
-    enabled: false
+    enabled: true
     forced: false
     siteName: "skm.finkash.co.za"
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
 
   backup:
-    enabled: false
+    enabled: true
     siteName: "skm.finkash.co.za"
     withFiles: true
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
 
@@ -319,7 +333,8 @@ jobs:
     skipFailing: false
     backoffLimit: 0
     resources: {}
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     tolerations: []
     affinity: {}
 
@@ -332,7 +347,8 @@ jobs:
     containers: []
     restartPolicy: Never
     volumes: []
-    nodeSelector: {}
+    nodeSelector:
+      kubernetes.io/arch: amd64
     affinity: {}
     tolerations: []
 
