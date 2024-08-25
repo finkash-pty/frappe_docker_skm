@@ -3,18 +3,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: erpnext-backup-20240825235347
+  name: frappe-bench-erpnext-backup-20240826000811
   labels:
     helm.sh/chart: erpnext-7.0.107
     app.kubernetes.io/name: erpnext
-    app.kubernetes.io/instance: erpnext
+    app.kubernetes.io/instance: frappe-bench
     app.kubernetes.io/version: "v15.33.5"
     app.kubernetes.io/managed-by: Helm
 spec:
   backoffLimit: 0
   template:
     spec:
-      serviceAccountName: erpnext
+      serviceAccountName: frappe-bench-erpnext
       securityContext:
         supplementalGroups:
         - 1000
@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: sites-dir
           persistentVolumeClaim:
-            claimName: erpnext
+            claimName: frappe-bench-erpnext
             readOnly: false
         - name: logs
           emptyDir: {}

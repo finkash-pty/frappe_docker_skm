@@ -3,13 +3,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: frappe-bench-erpnext-new-site-20240825170229
+  name: frappe-bench-erpnext-new-site-20240826000728
   labels:
     helm.sh/chart: erpnext-7.0.107
     app.kubernetes.io/name: erpnext
     app.kubernetes.io/instance: frappe-bench
     app.kubernetes.io/version: "v15.33.5"
     app.kubernetes.io/managed-by: Helm
+  annotations:
 spec:
   backoffLimit: 0
   template:
@@ -46,7 +47,7 @@ spec:
             - name: "DB_HOST"
               value: "srv-db-1.finkash.co.za"
             - name: "DB_PORT"
-              value: "3377"
+              value: "3366"
           resources:
             {}
           securityContext:
@@ -101,7 +102,7 @@ spec:
           - name: "DB_HOST"
             value: "srv-db-1.finkash.co.za"
           - name: "DB_PORT"
-            value: "3377"
+            value: "3366"
           - name: "DB_ROOT_USER"
             value: "root"
           - name: "DB_ROOT_PASSWORD"

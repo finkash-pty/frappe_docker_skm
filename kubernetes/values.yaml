@@ -294,9 +294,7 @@ jobs:
     forceCreate: true
     siteName: "skm.finkash.co.za"
     adminPassword: "6lB9fwr8jPlqgLHk"
-    installApps:
-    - "erpnext"
-    - "hrms"
+    installApps: ["erpnext","hrms"]
     dbType: "mariadb"
     backoffLimit: 0
     resources: {}
