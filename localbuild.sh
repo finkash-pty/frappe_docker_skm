@@ -1,0 +1,1 @@
+docker buildx build --platform linux/amd64,linux/arm64 --cache-from type=local,src=/tmp/.buildx-cache --cache-to type=local,dest=/tmp/.buildx-cache --push --tag ghcr.io/finkash-pty/frappe_docker_skm:v14.72.0 -f ./images/custom/Containerfile .
