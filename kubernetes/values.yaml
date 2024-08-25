@@ -280,8 +280,8 @@ jobs:
     args: []
 
   createSite:
-    enabled: false
-    forceCreate: false
+    enabled: true
+    forceCreate: true
     siteName: "skm.finkash.co.za"
     adminPassword: "6lB9fwr8jPlqgLHk"
     installApps:
