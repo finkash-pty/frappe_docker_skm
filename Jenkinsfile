@@ -4,7 +4,7 @@ pipeline {
         GITHUB_TOKEN = credentials('github')
         IMAGE_NAME = 'ghcr.io/finkash-pty/frappe_docker_skm'
         RELEASE_VERSION = readFile('version').trim()
-        FRAPPE_BRANCH = readFile('version').trim()
+        FRAPPE_BRANCH = readFile('version-frappe').trim()
         ERPNEXT_BRANCH = readFile('version').trim()
         IMAGE_FRAPPE = "${IMAGE_NAME}:${RELEASE_VERSION}"
         IMAGE_BENCH = "${IMAGE_NAME}-bench:${RELEASE_VERSION}"

@@ -1,0 +1,405 @@
+fullnameOverride: ''
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/finkash-pty/frappe_docker
+  tag: v15.33.0
+imagePullSecrets:
+  - name: github
+  - name: dockerhub
+ingress:
+  annotations:
+    spec.ingressClassName: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: finkash
+    acme.cert-manager.io/http01-edit-in-place: "true"
+  enabled: true
+  hosts:
+    - host: skm.finkash.co.za
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+    - host: cloud.finkash.co.za
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: skm-server-tls
+     hosts:
+       - skm.finkash.co.za
+       - cloud.finkash.co.za
+jobs:
+  backup:
+    affinity: {}
+    backoffLimit: 0
+    enabled: false
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: {}
+    siteName: erp.cluster.local
+    tolerations: []
+    withFiles: true
+  configure:
+    affinity: {}
+    args: []
+    backoffLimit: 0
+    command: []
+    enabled: true
+    envVars: []
+    fixVolume: false
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: 
+      requests:
+        cpu: 0.3
+        memory: 250
+    tolerations: []
+  createSite:
+    adminPassword: 6lB9fwr8jPlqgLHk
+    affinity: {}
+    backoffLimit: 0
+    dbType: mariadb
+    enabled: true
+    forceCreate: false
+    installApps:
+      - erpnext
+      - hrms
+      - crm
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: 
+      requests:
+        cpu: 0.3
+        memory: 250
+    siteName: skm.finkash.co.za
+    tolerations: []
+  custom:
+    affinity: {}
+    backoffLimit: 0
+    containers: []
+    enabled: false
+    initContainers: []
+    jobName: ''
+    labels: {}
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    restartPolicy: Never
+    tolerations: []
+    volumes: []
+  dropSite:
+    affinity: {}
+    backoffLimit: 0
+    enabled: false
+    forced: false
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: {}
+    siteName: erp.cluster.local
+    tolerations: []
+  migrate:
+    affinity: {}
+    backoffLimit: 0
+    enabled: false
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: {}
+    siteName: erp.cluster.local
+    skipFailing: false
+    tolerations: []
+  volumePermissions:
+    affinity: {}
+    backoffLimit: 0
+    enabled: false
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    resources: {}
+    tolerations: []
+mariadb:
+  auth:
+    password: changeit
+    replicationPassword: changeit
+    rootPassword: changeit
+    username: erpnext
+  enabled: false
+  primary:
+    extraFlags: >-
+      --skip-character-set-client-handshake --skip-innodb-read-only-compressed
+      --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    service:
+      ports:
+        mysql: 3306
+nameOverride: ''
+nginx:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 3
+    minReplicas: 1
+    targetCPU: 75
+    targetMemory: 75
+  envVars: []
+  environment:
+    frappeSiteNameHeader: $host
+    upstreamRealIPAddress: 127.0.0.1
+    upstreamRealIPHeader: X-Forwarded-For
+    upstreamRealIPRecursive: 'off'
+  initContainers: []
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    tcpSocket:
+      port: 8080
+  nodeSelector: {}
+    # kubernetes.io/arch: amd64
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    tcpSocket:
+      port: 8080
+  replicaCount: 1
+  resources: 
+    requests:
+      cpu: 0.3
+      memory: 250
+  service:
+    port: 8080
+    type: ClusterIP
+  sidecars: []
+  tolerations: []
+persistence:
+  logs:
+    enabled: true
+    size: 8Gi
+    storageClass: "longhorn"
+  worker:
+    enabled: true
+    size: 8Gi
+    storageClass: "longhorn"
+podSecurityContext:
+  supplementalGroups:
+    - 100
+postgresql:
+  auth:
+    postgresPassword: changeit
+    username: postgres
+  enabled: false
+  primary:
+    service:
+      ports:
+        postgresql: 5432
+redis-cache:
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinal: false
+  enabled: true
+  master:
+    containerPorts:
+      redis: 6379
+    persistence:
+      enabled: false
+redis-queue:
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinal: false
+  enabled: true
+  master:
+    containerPorts:
+      redis: 6379
+    persistence:
+      enabled: false
+securityContext:
+  capabilities:
+    add:
+      - CAP_CHOWN
+serviceAccount:
+  create: true
+socketio:
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 3
+    minReplicas: 1
+    targetCPU: 75
+    targetMemory: 75
+  envVars: []
+  initContainers: []
+  livenessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    tcpSocket:
+      port: 9000
+  nodeSelector: {}
+    # kubernetes.io/arch: amd64
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    tcpSocket:
+      port: 9000
+  replicaCount: 1
+  resources: 
+    requests:
+      cpu: 0.3
+      memory: 250
+  service:
+    port: 9000
+    type: ClusterIP
+  sidecars: []
+  tolerations: []
+worker:
+  default:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPU: 75
+      targetMemory: 75
+    envVars: []
+    initContainers: []
+    livenessProbe:
+      override: false
+      probe: {}
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    readinessProbe:
+      override: false
+      probe: {}
+    replicaCount: 1
+  resources: 
+    requests:
+      cpu: 0.3
+      memory: 250
+    sidecars: []
+    tolerations: []
+  gunicorn:
+    affinity: {}
+    args: []
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPU: 75
+      targetMemory: 75
+    envVars: []
+    initContainers: []
+    livenessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      tcpSocket:
+        port: 8000
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    readinessProbe:
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      tcpSocket:
+        port: 8000
+    replicaCount: 1
+    resources: 
+      requests:
+        cpu: 0.3
+        memory: 250
+    service:
+      port: 8000
+      type: ClusterIP
+    sidecars: []
+    tolerations: []
+  healthProbe: |
+    exec:
+      command:
+        - bash
+        - -c
+        - echo "Ping backing services";
+        {{- if .Values.mariadb.enabled }}
+        {{- if eq .Values.mariadb.architecture "replication" }}
+        - wait-for-it {{ .Release.Name }}-mariadb-primary:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- else }}
+        - wait-for-it {{ .Release.Name }}-mariadb:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- end }}
+        {{- else if .Values.dbHost }}
+        - wait-for-it {{ .Values.dbHost }}:{{ .Values.mariadb.primary.service.ports.mysql }} -t 1;
+        {{- end }}
+        {{- if index .Values "redis-cache" "host" }}
+        - wait-for-it {{ .Release.Name }}-redis-cache-master:{{ index .Values "redis-cache" "master" "containerPorts" "redis" }} -t 1;
+        {{- else if index .Values "redis-cache" "host" }}
+        - wait-for-it {{ index .Values "redis-cache" "host" }} -t 1;
+        {{- end }}
+        {{- if index .Values "redis-queue" "host" }}
+        - wait-for-it {{ .Release.Name }}-redis-queue-master:{{ index .Values "redis-queue" "master" "containerPorts" "redis" }} -t 1;
+        {{- else if index .Values "redis-queue" "host" }}
+        - wait-for-it {{ index .Values "redis-queue" "host" }} -t 1;
+        {{- end }}
+        {{- if .Values.postgresql.host }}
+        - wait-for-it {{ .Values.postgresql.host }}:{{ .Values.postgresql.primary.service.ports.postgresql }} -t 1;
+        {{- else if .Values.postgresql.enabled }}
+        - wait-for-it {{ .Release.Name }}-postgresql:{{ .Values.postgresql.primary.service.ports.postgresql }} -t 1;
+        {{- end }}
+    initialDelaySeconds: 15
+    periodSeconds: 5
+  long:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPU: 75
+      targetMemory: 75
+    envVars: []
+    initContainers: []
+    livenessProbe:
+      override: false
+      probe: {}
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    readinessProbe:
+      override: false
+      probe: {}
+    replicaCount: 1
+    resources: 
+      requests:
+        cpu: 0.3
+        memory: 250
+    sidecars: []
+    tolerations: []
+  scheduler:
+    affinity: {}
+    envVars: []
+    initContainers: []
+    livenessProbe:
+      override: false
+      probe: {}
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    readinessProbe:
+      override: false
+      probe: {}
+    replicaCount: 1
+    resources: 
+      requests:
+        cpu: 0.3
+        memory: 250
+    sidecars: []
+    tolerations: []
+  short:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPU: 75
+      targetMemory: 75
+    envVars: []
+    initContainers: []
+    livenessProbe:
+      override: false
+      probe: {}
+    nodeSelector: {}
+      # kubernetes.io/arch: amd64
+    readinessProbe:
+      override: false
+      probe: {}
+    replicaCount: 1
+    resources: {}
+    sidecars: []
+    tolerations: []

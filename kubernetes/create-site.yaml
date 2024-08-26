@@ -3,11 +3,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: frappe-bench-erpnext-new-site-20240826000728
+  name: skm-erpnext-new-site-20240826224807
   labels:
     helm.sh/chart: erpnext-7.0.107
     app.kubernetes.io/name: erpnext
-    app.kubernetes.io/instance: frappe-bench
+    app.kubernetes.io/instance: skm-erpnext
     app.kubernetes.io/version: "v15.33.5"
     app.kubernetes.io/managed-by: Helm
   annotations:
@@ -15,13 +15,15 @@ spec:
   backoffLimit: 0
   template:
     spec:
-      serviceAccountName: frappe-bench-erpnext
+      imagePullSecrets:
+        - name: github
+      serviceAccountName: skm-erpnext
       securityContext:
         supplementalGroups:
         - 1000
       initContainers:
         - name: validate-config
-          image: "ghcr.io/finkash-pty/frappe/erpnext:v15"
+          image: "ghcr.io/finkash-pty/frappe_docker_skm-bench:version-15"
           imagePullPolicy: IfNotPresent
           command: ["bash", "-c"]
           args:
@@ -47,7 +49,7 @@ spec:
             - name: "DB_HOST"
               value: "srv-db-1.finkash.co.za"
             - name: "DB_PORT"
-              value: "3366"
+              value: "3377"
           resources:
             {}
           securityContext:
@@ -59,7 +61,7 @@ spec:
               mountPath: /home/frappe/frappe-bench/sites
       containers:
       - name: create-site
-        image: "ghcr.io/finkash-pty/frappe/erpnext:v15"
+        image: "ghcr.io/finkash-pty/frappe_docker_skm-bench:version-15"
         imagePullPolicy: IfNotPresent
         command: ["bash", "-c"]
         args:
@@ -76,6 +78,7 @@ spec:
               --mariadb-root-password=${DB_ROOT_PASSWORD} \
               --install-app=erpnext \
               --install-app=hrms \
+              --install-app=crm \
               --force \
              | tee /dev/stderr);
 
@@ -102,14 +105,14 @@ spec:
           - name: "DB_HOST"
             value: "srv-db-1.finkash.co.za"
           - name: "DB_PORT"
-            value: "3366"
+            value: "3377"
           - name: "DB_ROOT_USER"
             value: "root"
           - name: "DB_ROOT_PASSWORD"
             valueFrom:
               secretKeyRef:
                 key:  db-root-password
-                name: frappe-bench
+                name: skm
           - name: "ADMIN_PASSWORD"
             value: "6lB9fwr8jPlqgLHk"
         resources:
@@ -127,9 +130,7 @@ spec:
       volumes:
         - name: sites-dir
           persistentVolumeClaim:
-            claimName: frappe-bench-erpnext
+            claimName: skm-erpnext
             readOnly: false
         - name: logs
           emptyDir: {}
-      nodeSelector:
-        kubernetes.io/arch: amd64
