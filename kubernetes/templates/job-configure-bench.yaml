@@ -55,7 +55,7 @@ spec:
             [[ -f sites/common_site_config.json ]] || echo "{}" > sites/common_site_config.json;
             
             bench --site all set-config -gp db_port $DB_PORT;
-            bench s--site all et-config -g db_host $DB_HOST;
+            bench --site all et-config -g db_host $DB_HOST;
             {{- if .Values.dbRds }}
             bench set-config -gp rds_db 1;
             {{- end}}
