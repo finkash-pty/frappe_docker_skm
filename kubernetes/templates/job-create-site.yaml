@@ -30,6 +30,7 @@ spec:
           args:
             - >
               export start=`date +%s`;
+              cd /home/frappe/frappe-bench
               until [[ -n `grep -hs ^ sites/common_site_config.json | jq -r ".db_host // empty"` ]] && \
                 [[ -n `grep -hs ^ sites/common_site_config.json | jq -r ".redis_cache // empty"` ]] && \
                 [[ -n `grep -hs ^ sites/common_site_config.json | jq -r ".redis_queue // empty"` ]];
@@ -76,6 +77,8 @@ spec:
           volumeMounts:
             - name: sites-dir
               mountPath: /home/frappe/frappe-bench/sites
+            - name: apps-dir
+              mountPath: /home/frappe/frappe-bench/apps
       containers:
       - name: create-site
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -83,6 +86,7 @@ spec:
         command: ["bash", "-c"]
         args:
           - >
+            cd /home/frappe/frappe-bench
             set -x;
 
             bench_output=$(bench new-site ${SITE_NAME} \
@@ -184,6 +188,18 @@ spec:
       restartPolicy: Never
       volumes:
         - name: sites-dir
+          {{- if .Values.persistence.worker.enabled }}
+          persistentVolumeClaim:
+            {{- if .Values.persistence.worker.existingClaim }}
+            claimName: {{ .Values.persistence.worker.existingClaim }}
+            {{- else }}
+            claimName: {{ template "erpnext.fullname" . }}
+            {{- end }}
+            readOnly: false
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: apps-dir
           {{- if .Values.persistence.worker.enabled }}
           persistentVolumeClaim:
             {{- if .Values.persistence.worker.existingClaim }}

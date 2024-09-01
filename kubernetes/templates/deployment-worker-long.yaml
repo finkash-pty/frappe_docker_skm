@@ -59,6 +59,8 @@ spec:
           volumeMounts:
           - name: sites-dir
             mountPath: /home/frappe/frappe-bench/sites
+          - name: apps-dir
+            mountPath: /home/frappe/frappe-bench/apps
           - name: logs
             mountPath: /home/frappe/frappe-bench/logs
       {{- if .Values.worker.long.sidecars }}
@@ -66,6 +68,18 @@ spec:
       {{- end }}
       volumes:
         - name: sites-dir
+          {{- if .Values.persistence.worker.enabled }}
+          persistentVolumeClaim:
+            {{- if .Values.persistence.worker.existingClaim }}
+            claimName: {{ .Values.persistence.worker.existingClaim }}
+            {{- else }}
+            claimName: {{ template "erpnext.fullname" . }}
+            {{- end }}
+            readOnly: false
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: apps-dir
           {{- if .Values.persistence.worker.enabled }}
           persistentVolumeClaim:
             {{- if .Values.persistence.worker.existingClaim }}
