@@ -16,6 +16,7 @@ development/*
 # VS Code
 .vscode/**
 !.vscode/extensions.json
+.DS_Store
 
 # VS Code devcontainer
 .devcontainer
