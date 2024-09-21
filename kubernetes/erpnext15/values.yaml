@@ -357,7 +357,7 @@ jobs:
 
   migrate:
     enabled: false
-    siteName: "erp.cluster.local"
+    siteName: "cloud.finkash.co.za"
     skipFailing: false
     backoffLimit: 0
     resources: {}
