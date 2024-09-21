@@ -284,7 +284,12 @@ ingress:
   - host: cloud.finkash.co.za
     paths:
     - path: /
-      pathType: ImplementationSpecific
+      pathType: Prefix
+      backend:
+        service:
+          name: erpnext-gunicorn
+          port:
+            number: 8000
   tls:
    - secretName: skm-server-tls
      hosts:
@@ -314,10 +319,10 @@ jobs:
     args: []
 
   createSite:
-    enabled: false
-    forceCreate: false
-    siteName: "erp.cluster.local"
-    adminPassword: "changeit"
+    enabled: true
+    forceCreate: true
+    siteName: "cloud.finkash.co.za"
+    adminPassword: "admin"
     installApps:
     - "erpnext"
     dbType: "mariadb"
