@@ -1,0 +1,54 @@
+---
+# Source: erpnext/templates/job-migrate-site.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: release-name-erpnext-migrate-20240921213509
+  labels:
+    helm.sh/chart: erpnext-7.0.115
+    app.kubernetes.io/name: erpnext
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "v15.36.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      serviceAccountName: release-name-erpnext
+      securityContext:
+        supplementalGroups:
+        - 1000
+      containers:
+      - name: migrate
+        image: "frappe/erpnext:v15.36.1"
+        imagePullPolicy: IfNotPresent
+        command: ["bash", "-c"]
+        args:
+          - >
+            bench --site $(SITE_NAME) set-maintenance-mode on;
+            bench --site $(SITE_NAME) migrate ;
+            bench --site $(SITE_NAME) set-maintenance-mode off;
+        env:
+          - name: "SITE_NAME"
+            value: "cloud.finkash.co.za"
+        resources:
+          {}
+        securityContext:
+          capabilities:
+            add:
+            - CAP_CHOWN
+        volumeMounts:
+          - name: sites-dir
+            mountPath: /home/frappe/frappe-bench/sites
+          - name: logs
+            mountPath: /home/frappe/frappe-bench/logs
+      restartPolicy: Never
+      volumes:
+        - name: sites-dir
+          persistentVolumeClaim:
+            claimName: release-name-erpnext
+            readOnly: false
+        - name: logs
+          emptyDir: {}
+      nodeSelector:
+        kubernetes.io/arch: amd64
