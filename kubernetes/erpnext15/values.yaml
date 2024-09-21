@@ -325,6 +325,7 @@ jobs:
     adminPassword: "admin"
     installApps:
     - "erpnext"
+    - "redeye"
     dbType: "mariadb"
     backoffLimit: 0
     resources: {}

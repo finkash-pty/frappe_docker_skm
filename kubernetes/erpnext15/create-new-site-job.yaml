@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: release-name-erpnext-new-site-20240921215446
+  name: release-name-erpnext-new-site-20240921222036
   labels:
     helm.sh/chart: erpnext-7.0.115
     app.kubernetes.io/name: erpnext
@@ -75,6 +75,7 @@ spec:
               --mariadb-root-username=${DB_ROOT_USER} \
               --mariadb-root-password=${DB_ROOT_PASSWORD} \
               --install-app=erpnext \
+              --install-app=redeye \
               --force \
              | tee /dev/stderr);
 
