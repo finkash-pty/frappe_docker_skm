@@ -274,7 +274,7 @@ persistence:
 ingress:
   # ingressName: ""
   # className: ""
-  enabled: true
+  enabled: false
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
@@ -319,7 +319,7 @@ jobs:
     args: []
 
   createSite:
-    enabled: true
+    enabled: false
     forceCreate: true
     siteName: "cloud.finkash.co.za"
     adminPassword: "admin"
@@ -356,7 +356,7 @@ jobs:
     affinity: {}
 
   migrate:
-    enabled: true
+    enabled: false
     siteName: "cloud.finkash.co.za"
     skipFailing: false
     backoffLimit: 0
